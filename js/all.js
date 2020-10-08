@@ -1,21 +1,21 @@
 
 //宣告變數
-var btn = document.querySelector('.output-btn');
-var resultBtn = document.querySelector('.result-btn');
-var height = document.querySelector('.height-input');
-var weight = document.querySelector('.weight-input');
-var list = document.querySelector('.list');
-var refresh = document.querySelector('.refresh')
+let btn = document.querySelector('.output-btn');
+let resultBtn = document.querySelector('.result-btn');
+let height = document.querySelector('.height-input');
+let weight = document.querySelector('.weight-input');
+let list = document.querySelector('.list');
+let refresh = document.querySelector('.refresh');
+let alert = document.querySelector('.alert');
 
+let deleteBTN = document.querySelector('.delete');
 
-var deleteBTN = document.querySelector('.delete');
-
-var data = JSON.parse(localStorage.getItem('listData')) || [] ;
+let data = JSON.parse(localStorage.getItem('listData')) || [] ;
 
 //綁定監聽事件
 
 btn.addEventListener('click',countBMI);
-deleteBTN.addEventListener('click',remove);
+deleteBTN.addEventListener('click',removeAll);
 
 updateList();
 
@@ -24,24 +24,26 @@ updateList();
 //點擊計算BMI
 
 function countBMI(){
-   var hNum = height.value; //身高 公分
-   var hNumDot = height.value/100; //身高 公尺
-   var wNum = weight.value;
-   var bmiNum = wNum / ( hNumDot*hNumDot )
-   var resultBMI = bmiNum.toFixed(2);//取小數點2位
-   var date = new Date();
-   var year = date.getFullYear();
-   var month = date.getMonth();
-   var monthCHANGE = month +1;
-   var day = date.getDate();
+   let hNum = height.value; //身高 公分
+   let hNumDot = height.value/100; //身高 公尺
+   let wNum = weight.value;
+   let bmiNum = wNum / ( hNumDot*hNumDot )
+   let resultBMI = bmiNum.toFixed(2);//取小數點2位
+   let date = new Date();
+   let year = date.getFullYear();
+   let month = date.getMonth();
+   let monthCHANGE = month +1;
+   let day = date.getDate();
+
 
    if( hNum =='' || wNum ==''){
-    alert('欄位不可空白') //提醒輸入框不可空白
+     alert.style.display = 'block'; //提醒欄位不可空白
     return;
    }
+     alert.style.display = 'none';
 
-   var condition ="";
-   var classColor ="";
+   let condition ="";
+   let classColor ="";
    
    if(resultBMI<=18.5){ //判斷bmi，並將結果儲存到localStorage
       condition ="過輕";
@@ -65,7 +67,7 @@ function countBMI(){
    }
 
 
-   var str = {
+   const str = {
      height:hNum,
      heightDot:hNumDot,
      weight:wNum,
@@ -88,11 +90,14 @@ function countBMI(){
    btn.style.display = 'none'; //刪除原按鈕
    resultBtn.style.display = 'block';
    
-   var btnSTR ;
-   btnSTR= '<li class="number">'+ resultBMI +'</li>'+
-           '<li>BMI</li>'+
-           '<div class="refresh '+classColor+'"><img src="https://upload.cc/i1/2020/10/01/voJMKS.png" alt=""></div>'+
-           '<p>'+ condition +'</p>'
+   let btnSTR ;
+   btnSTR= `<li class="number">${resultBMI}</li>
+            <li>BMI</li>
+            <div class="refresh ${classColor}">
+               <img src="https://upload.cc/i1/2020/10/01/voJMKS.png" alt="">
+            </div>
+            <p>${condition}</p>`
+            
    resultBtn.innerHTML = btnSTR;
 
    if(resultBMI<=18.5){ //判斷bmi 將樣式套用至按鈕上
@@ -128,26 +133,39 @@ resultBtn.addEventListener('click',back,false);
 //更新畫面
 function updateList(){
   
-  var str = '';
-  for(var i=0;i<data.length;i++){
+  let str = '';
+  for(let i=0;i<data.length;i++){
 
-    str+= '<li class="'+data[i].classColor+'">'+'<span class="status" data-num="'+i+'">'+data[i].condition+'</span>'+
-    '<span>BMI '+'<em>'+ data[i].bmi+'</em>'+'</span>'+
-    '<span>Weight '+'<em>'+ data[i].weight +'</em>'+' kg'+'</span>'+ 
-    '<span>height '+'<em>'+data[i].height+'</em>'+' cm'+'</span>'+
-    '<span>'+ data[i].day+'-'+data[i].month+'-'+data[i].year +'</span>'+
-    '</li>'   
+    str+= `<li class="${data[i].classColor}" data-num="${i}">
+               <a class="status" >${data[i].condition}</a>
+               <span>BMI<em>${data[i].bmi}</em></span>
+               <span>Weight<em>${data[i].weight}</em> kg</span>
+               <span>height<em>${data[i].height}</em> cm</span>
+               <span>${data[i].day}-${data[i].month}-${data[i].year}</span>
+           </li>`   
   }
   list.innerHTML = str; 
-
 }
 
 //刪除全部紀錄
-function remove(){
+function removeAll(){
   data = [];
   localStorage.setItem('listData',JSON.stringify(data));
   updateList();
 }
+
+//刪除單筆紀錄
+
+list.addEventListener('click',function(e){
+      let str = e.target.nodeName;
+      if(str !== "A"){return;}
+
+      let num = e.target.dataset.num;//確認刪除的是第幾筆
+      data.splice(num,1);//刪除資料
+      localStorage.setItem('listData',JSON.stringify(data));//儲存刪除後資料
+      updateList();
+ },false);
+
 
 
 
