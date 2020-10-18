@@ -96,10 +96,9 @@
    list-style: none;
 }
 .result-btn p{
-    position: absolute;
-    right:-120%;
-    bottom:8%;
-    font-size: 32px;
+    margin-top: 60px;
+	font-size: 24px;
+	text-align: center;
 }
 
 .result-btn .number{
@@ -160,8 +159,35 @@
 	border-left: 10px solid #86D73E;
 	transition: .3s;
 }
+
 .list li:hover{
 	background-color: #ccc;
+}
+.list li a{ position: relative;}
+@media(max-width:768px){
+	.list li a{
+		font-size: 12px;
+		margin-right: 5px;
+	}
+}
+.list li a::before{
+   content: '點擊文字刪除';
+   font-size: 12px;
+   text-align: center;
+   line-height: 30px;
+   width: 80px;
+   height: 30px;
+   background-color: #b12755;
+   color: #fff;
+   font-weight: 600;
+   position: absolute;
+   top: -150%;
+   left: 0;
+   border-radius: 8%;
+   display: none;
+}
+.list li a:hover::before{
+	display: block;
 }
 .list li.light{border-left: 10px solid #31BAF9;}
 .list li.good{border-left: 10px solid #86D73E;}

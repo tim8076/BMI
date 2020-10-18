@@ -101,17 +101,17 @@ function countBMI(){
    resultBtn.innerHTML = btnSTR;
 
    if(resultBMI<=18.5){ //判斷bmi 將樣式套用至按鈕上
-      resultBtn.classList.add('light');
+      resultBtn.setAttribute('class','result-btn light');
    }else if(resultBMI>18.5 && resultBMI<=25) {
-      resultBtn.classList.add('good');
+      resultBtn.setAttribute('class', 'result-btn good');
    }else if(resultBMI>25 && resultBMI<=30){
-      resultBtn.classList.add('overWeight');
+      resultBtn.setAttribute('class', 'result-btn overWeight');
    }else if(resultBMI>30 && resultBMI<=35){
-     resultBtn.classList.add('fatLittle');
+      resultBtn.setAttribute('class', 'result-btn fatLittle');
    }else if(resultBMI>35 && resultBMI<=40){
-     resultBtn.classList.add('fatMiddle');
+      resultBtn.setAttribute('class', 'result-btn fatMiddle');
    }else{
-     resultBtn.classList.add('fatAlot');
+      resultBtn.setAttribute('class', 'result-btn fatAlot');
    }
 
    height.value = ''; //清空輸入框
@@ -137,7 +137,7 @@ function updateList(){
   for(let i=0;i<data.length;i++){
 
     str+= `<li class="${data[i].classColor}" data-num="${i}">
-               <a class="status" >${data[i].condition}</a>
+               <a class="status" data-num="${i}">${data[i].condition}</a>
                <span>BMI<em>${data[i].bmi}</em></span>
                <span>Weight<em>${data[i].weight}</em> kg</span>
                <span>height<em>${data[i].height}</em> cm</span>
